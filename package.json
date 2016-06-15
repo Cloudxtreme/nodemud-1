@@ -1,0 +1,10 @@
+{
+  "name": "nuclearmud",
+  "version": "0.0.0",
+  "description": "Nodejs MUD.",
+  "main": "main.js",
+  "dependencies": {
+    "jsdoc": "^3.4.0"
+  },
+  "author": "milkmanjack"
+}

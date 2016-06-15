@@ -1,0 +1,20 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "source": {
+		"include": [ "../src/mud", "../src/mud/atom", "../src/mud/datum", "../src/mud/io", "../src/util" ],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+	"opts": {
+		"destination": "./generated/",
+		"readme": "JSDOC.md"
+	}
+}
