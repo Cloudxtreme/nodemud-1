@@ -22,7 +22,7 @@ Database.meta					= {};
  * @type {String}
  * @default "NuclearMUD"
  */
-Database.meta.name				= "NuclearMUD";
+Database.meta.name				= "nodemud";
 
 /**
  * Current version of the MUD.
