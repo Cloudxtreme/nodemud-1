@@ -37,10 +37,30 @@ function Client(socket) {
 
 Client.prototype = new events.EventEmitter();
 
+/**
+ * The socket being managed by the client.
+ * @type {net.socket}
+ */
 Client.prototype.socket = null;
+
+/**
+ * The socket's address.
+ * @type {Object}
+ */
 Client.prototype.address = null;
+
+/**
+ * Playing being controlled by the client.
+ * @type {net.socket}
+ */
 Client.prototype.player = null;
 
+
+/**
+ * Generate a string representing the client.
+ * @default "client@" + plus the client's IP address
+ * @return {String}
+ */
 Client.prototype.toString = function() {
 	return "client@"+this.address.address;
 }
