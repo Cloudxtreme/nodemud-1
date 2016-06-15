@@ -1,13 +1,14 @@
+// local requires
 var LogLevel = require("./LogLevel");
 
 /** @namespace **/
-var Log			= {};
+var Log = {};
 
 /**
  * Minimum log level.
  * @type {LogLevel}
  */
-Log.minLog		= LogLevel.INFO;
+Log.minLog = LogLevel.INFO;
 
 /**
  * Log a message.

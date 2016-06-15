@@ -45,7 +45,7 @@ Tile.prototype.y = 0;
 Tile.prototype.z = 0;
 
 Tile.prototype.toSavable = function() {
-	var savable = Tile.prototype.toSaveable.call(this);
+	var savable = Mappable.prototype.toSaveable.call(this);
 	savable.type = "Tile";
 	return savable;
 }

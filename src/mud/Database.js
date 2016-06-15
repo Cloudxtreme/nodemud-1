@@ -1,91 +1,93 @@
+// node requires
 var fs = require("fs");
 
+// local requires
 require("../util/String");
 
-var MUD							= require("./MUD");
-var Log							= require("./Log");
+var MUD = require("./MUD");
+var Log = require("./Log");
 
 /**
  * Contains all data loaded at runtime, and methods related to saving and loading data.
  * @namespace Database
  */
-var Database					= {};
+var Database = {};
 
 /**
  * Meta data about the game.
  * @namespace Database.meta
  */
-Database.meta					= {};
+Database.meta = {};
 
 /**
  * Name of the MUD.
  * @type {String}
  * @default "NuclearMUD"
  */
-Database.meta.name				= "nodemud";
+Database.meta.name = "nodemud";
 
 /**
  * Current version of the MUD.
  * @type {String}
  * @default "0.0.0.0"
  */
-Database.meta.version			= "0.0.0.0";
+Database.meta.version = "0.0.0.0";
 
 /**
  * Persistent data about the game.
  * @namespace Database.persistent
  */
-Database.persistent				= {};
+Database.persistent = {};
 
 /**
  * Universal unique ID for characters.
  * @type {Number}
  * @default 0
  */
-Database.persistent.characterID	= 0;
+Database.persistent.characterID = 0;
 
 /**
  * Data unique to this session of the game.
  * @namespace Database.session
  */
-Database.session				= {};
+Database.session = {};
 
 /**
  * Session unique ID for player connections.
  * @type {Number}
  * @default 0
  */
-Database.session.playerID		= 0;
+Database.session.playerID = 0;
 
 /**
  * List of hard-coded commands.
  * @type {Command[]}
  */
-Database.commands				= [];
+Database.commands = [];
 
 /**
  * Contains raw savable (JSON) objects that represent runtime objects.
  * @namespace Database.userdata
  */
-Database.userdata				= {};
+Database.userdata = {};
 
 /**
  * List of characters.
  * @type {Object[]}
  */
-Database.userdata.characters	= [];
+Database.userdata.characters = [];
 
 /**
  * List of user-defined commands.
  * @type {Object[]}
  */
-Database.userdata.commands		= [];
+Database.userdata.commands = [];
 
 /**
  * List of help-files.
  * @type {Object[]}
  */
-Database.userdata.help			= [];
+Database.userdata.help = [];
 
 /**
  * Retrieve the next available character ID.
@@ -134,6 +136,9 @@ Database.load = function() {
 	this.loadUserCommands();
 }
 
+/**
+ * Load meta data.
+ */
 Database.loadMeta = function() {
 	if(fs.existsSync("./data/meta.json")) {
 		this.meta = require("../../data/meta.json");
@@ -141,6 +146,9 @@ Database.loadMeta = function() {
 	}
 }
 
+/**
+ * Load persistent data.
+ */
 Database.loadPersistent = function() {
 	if(fs.existsSync("./data/persistent.json")) {
 		this.persistent = require("../../data/persistent.json");
@@ -195,12 +203,17 @@ Database.loadUserCommands = function() {
 
 /**
  * Save all runtime data.
+ * @param {boolean} block Should the operation block?
  */
 Database.save = function(block) {
 	Database.saveMeta(block);
 	Database.savePersistent(block);
 }
 
+/**
+ * Save meta data.
+ * @param {boolean} block Should the operation block?
+ */
 Database.saveMeta = function(block) {
 	try {
 		if(!block) {
@@ -215,6 +228,10 @@ Database.saveMeta = function(block) {
 	}
 }
 
+/**
+ * Save persistent data.
+ * @param {boolean} block Should the operation block?
+ */
 Database.savePersistent = function(block) {
 	try {
 		if(!block) {

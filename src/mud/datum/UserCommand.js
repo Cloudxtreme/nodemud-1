@@ -1,4 +1,7 @@
+// node requires
 var vm = require("vm");
+
+// local requires
 var Command = require("./Command");
 var MUD = require("../MUD");
 var Database = require("../Database");

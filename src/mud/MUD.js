@@ -1,26 +1,27 @@
+// local requires
 require("../util/String");
-var Log		= require("./Log");
+var Log = require("./Log");
 
 /**
  * Contains all data and methods for managing the normal operations of the game.
  * @namespace MUD
  */
-var MUD		= {};
+var MUD = {};
 
 /** The server the MUD is listening on. */
-MUD.server	= null;
+MUD.server = null;
 
 /**
  * Players connect to the MUD.
  * @type {Player[]}
  */
-MUD.players	= [];
+MUD.players = [];
 
 /**
  * The MUD's active map.
  * @type {Map}
  */
-MUD.map		= null;
+MUD.map = null;
 
 /**
  * Begin handling a new player connection.
