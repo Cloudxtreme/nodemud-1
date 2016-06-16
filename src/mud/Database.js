@@ -21,7 +21,7 @@ Database.meta = {};
 /**
  * Name of the MUD.
  * @type {String}
- * @default "NuclearMUD"
+ * @default "nodemud"
  */
 Database.meta.name = "nodemud";
 
@@ -31,6 +31,13 @@ Database.meta.name = "nodemud";
  * @default "0.0.0.0"
  */
 Database.meta.version = "0.0.0.0";
+
+/**
+ * Default port to host the MUD on.
+ * @type {Number}
+ * @default 8000
+ */
+Database.meta.defaultPort = 8000;
 
 /**
  * Persistent data about the game.
