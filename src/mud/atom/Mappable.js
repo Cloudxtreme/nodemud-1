@@ -71,7 +71,7 @@ Mappable.prototype.toSavable = function() {
 		var c = [];
 		for(var i=0;i<this.contents.length;i++) {
 			var obj = this.contents[i];
-			c.push(obj.toSaveable());
+			c.push(obj.toSavable());
 		}
 
 		savable.contents = c;
@@ -99,34 +99,54 @@ Mappable.prototype.getStep = function(realdir) {
 		return null;
 	}
 
-	var cx = this.location.x, cy = this.location.y, cz = this.location.z;
+	var loc = this.location.getCoordinates();
 	if(realdir&RealDirection.NORTH) {
-		cy--;
+		loc.y--;
 	} else if(realdir&RealDirection.SOUTH) {
-		cy++;
+		loc.y++;
 	}
 
 	if(realdir&RealDirection.EAST) {
-		cx++;
+		loc.x++;
 	} else if(realdir&RealDirection.WEST) {
-		cx--;
+		loc.x--;
 	}
 
-	return this.map.locate(cx,cy,cz);
+	return this.map.locate(loc.x, loc.y, loc.z);
 }
 
+/**
+ * Get the mappable's current location*
+ * @type {Mappable}
+ */
 Mappable.prototype.getLocation = function() {
 	return this.location;
 }
 
+/**
+ * Check if the Mappable contains another certain Mappable.
+ * @param {Mappable} mappable Mappable to check for.
+ * @return {boolean}
+ */
 Mappable.prototype.contains = function(mappable) {
 	return this.contents.indexOf(mappable) == -1 ? false : true;
 }
 
+/**
+ * Add a mappable to this mappable's contents.
+ * @param {Mappable} mappable Mappable to add.
+ */
 Mappable.prototype.addToContents = function(mappable) {
 	this.contents.push(mappable);
+	if(mappable.location != this) {
+		mappable.setLocation(this);
+	}
 }
 
+/**
+ * Remove a mappable from this mappable's contents.
+ * @param {Mappable} mappable Mappable to remove.
+ */
 Mappable.prototype.removeFromContents = function(mappable) {
 	var pos = this.contents.indexOf(mappable);
 	if(pos == -1) {
@@ -134,8 +154,15 @@ Mappable.prototype.removeFromContents = function(mappable) {
 	}
 
 	this.contents.splice(pos,1);
+	if(mappable.location == this) {
+		mappable.setLocation(null);
+	}
 }
 
+/**
+ * Set the Mappable's current map.
+ * @param {Map} map Map to move to.
+ */
 Mappable.prototype.setMap = function(map) {
 	if(this.map) {
 		var oMap = this.map;
@@ -152,6 +179,10 @@ Mappable.prototype.setMap = function(map) {
 	}
 }
 
+/**
+ * Set the Mappable's current location.
+ * @param {Mappable} mappable New location.
+ */
 Mappable.prototype.setLocation = function(mappable) {
 	if(this.location) {
 		this.location.removeFromContents(this);
@@ -167,16 +198,34 @@ Mappable.prototype.setLocation = function(mappable) {
 	}
 }
 
+/**
+ * Called when a mappable has entered.
+ * @param {Mappable} mappable Mappable that has entered.
+ */
 Mappable.prototype.onEnter = function(mappable) {
 }
 
+/**
+ * Called when a mappable has exited.
+ * @param {Mappable} mappable Mappable that has exited.
+ */
 Mappable.prototype.onExit = function(mappable) {
 }
 
+/**
+ * Can a mappable enter?
+ * @param {Mappable} mappable Mappable trying to enter.
+ * @return {boolean}
+ */
 Mappable.prototype.canEnter = function(mappable) {
 	return true;
 }
 
+/**
+ * Can a mappable exit?
+ * @param {Mappable} mappable Mappable trying to exit.
+ * @return {boolean}
+ */
 Mappable.prototype.canExit = function(mappable) {
 	return true;
 }

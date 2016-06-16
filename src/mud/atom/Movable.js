@@ -22,7 +22,7 @@ Movable.prototype.toSavable = function() {
 	savable.type = "Movable";
 
 	if(this.location != null && this.location instanceof Tile) {
-		savable.location = {"x":this.location.x, "y":this.location.y, "z":this.location.z};
+		savable.location = this.location.getCoordinates();
 	}
 
 	return savable;
