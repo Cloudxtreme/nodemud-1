@@ -13,7 +13,6 @@ function Movable(map, location) {
 }
 
 Movable.prototype = new Mappable();
-
 Movable.prototype.keywords = "movable";
 Movable.prototype.display = "movable";
 Movable.prototype.description = "A movable.";

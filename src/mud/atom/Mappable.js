@@ -147,6 +147,8 @@ Mappable.prototype.setMap = function(map) {
 
 	if(map && !map.contains(this)) {
 		map.addToContents(this);
+	} else if(!map || this.location.map != map) {
+		this.setLocation(null);
 	}
 }
 
@@ -162,8 +164,6 @@ Mappable.prototype.setLocation = function(mappable) {
 			this.setMap(mappable.map);
 		}
 		mappable.addToContents(this);
-	} else {
-		this.setMap(null);
 	}
 }
 

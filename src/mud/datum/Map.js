@@ -122,5 +122,4 @@ Map.prototype.removeFromContents = function(mappable) {
 	}
 }
 
-
 module.exports = Map;

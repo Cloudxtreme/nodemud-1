@@ -7,6 +7,7 @@ var MUD = require("../MUD");
 var Database = require("../Database");
 var RealDirection = require("../RealDirection");
 var Direction = require("../Direction");
+var Map = require("../datum/Map");
 var Mappable = require("../atom/Mappable");
 var Movable = require("../atom/Movable");
 var Mob = require("../atom/Mob");
@@ -26,6 +27,7 @@ require("../../util/String");
 
 	Log:Log,
 	String:String,
+	Map:Map,
 	Mappable:Mappable,
 	Movable:Movable,
 	Tile:Tile,
@@ -36,22 +38,16 @@ require("../../util/String");
 
 /**
  * Object used for processing commands defined at runtime.
- * @param {String?} regex RegExp to assign to command.
- * @param {String?} body Body of the function to execute.
+ * @param {Object} User command data object.
  * @constructor
  * @extends Command
  */
-function UserCommand(regex, body) {
+function UserCommand(data) {
 	Command.call(this);
 
 	// initialize
-	if(regex) {
-		this.regex = new RegExp(regex, "i");
-	}
-
-	if(body) {
-		this.body = body;
-	}
+	this.regex = new RegExp(data.regex, "i");
+	this.body = data.body;
 }
 
 UserCommand.prototype = new Command();
@@ -66,6 +62,10 @@ UserCommand.prototype.load = false;
  * Runs the body of the user-defined command in a virtual machine with a safe context.<br/><br/>
  * Has limited access to the following packages:
  * <ul>
+ *  <li>console <sup>only has access to the following members</sup></li>
+ *  <ul>
+ *   <li>log</li>
+ *  </ul>
  *  <li>{@link MUD} <sup>only has access to following members</sup></li>
  *  <ul>
  *   <li>{@link MUD.map}</li>
@@ -85,6 +85,7 @@ UserCommand.prototype.load = false;
  * </ul>
  * Has complete access to the following objects:
  * <ul>
+ *  <li>{@link Map}</li>
  *  <li>{@link Mappable}</li>
  *  <li>{@link Tile}</li>
  *  <li>{@link Movable}</li>
@@ -106,6 +107,11 @@ UserCommand.prototype.execute = function(mob) {
 	var script = new vm.Script(this.body);
 	var _context = {
 		// obfuscated namespaces
+		console:{
+			log:function() {
+				console.log.apply(console, Array.prototype.slice.call(arguments));
+			}
+		},
 		MUD:{
 			map:MUD.map,
 			sendLine:MUD.sendLine
@@ -122,6 +128,7 @@ UserCommand.prototype.execute = function(mob) {
 		Direction:Direction,
 
 		// objects we share whole-cloth
+		Map:Map,
 		Mappable:Mappable,
 		Movable:Movable,
 		Tile:Tile,
@@ -133,11 +140,11 @@ UserCommand.prototype.execute = function(mob) {
 	};
 
 	var context = new vm.createContext(_context);
-	try {
+//	try {
 		script.runInContext(context);
-	} catch(e) {
+/*	} catch(e) {
 		Log.error(String.format("Failed to run user command '{0}' ({1})", this.regex, e));
-	}
+	}*/
 }
 
 module.exports = UserCommand;

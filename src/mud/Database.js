@@ -72,6 +72,12 @@ Database.session.playerID = 0;
 Database.commands = [];
 
 /**
+ * List of soft-coded (user-defined) commands.
+ * @type {UserCommand[]}
+ */
+Database.userCommands = [];
+
+/**
  * Contains raw savable (JSON) objects that represent runtime objects.
  * @namespace Database.userdata
  */
@@ -120,8 +126,14 @@ Database.getNextPlayerID = function() {
  * @return {boolean} true on success, false otherwise.
  */
 Database.processCommand = function(mob, input) {
-	var commands = Database.commands.concat(Database.userdata.commands);
-	for(var command of commands) {
+	for(var command of Database.commands) {
+		if(command.match(mob, input)) {
+			command.process(mob, input);
+			return command;
+		}
+	}
+
+	for(var command of Database.userCommands) {
 		if(command.match(mob, input)) {
 			command.process(mob, input);
 			return command;
@@ -196,9 +208,10 @@ Database.loadUserCommands = function() {
 		for(var file of files) {
 			var s = file.split(".");
 			try {
-				var command = require("../../data/commands/"+s[0]);
-				var instance = new UserCommand(command.regex, command.fun);
-				Database.commands.push(instance);
+				var data = require("../../data/commands/"+s[0]);
+				Database.userdata.commands.push(data);
+				var instance = new UserCommand(data);
+				Database.userCommands.push(instance);
 				Log.boot(">  Loaded "+file);
 			} catch(e) {
 				Log.error(String.format("Failed to load user command '{0}' ({1})", s[0], e));

@@ -1,4 +1,4 @@
 {
 	"regex": "^test$",
-	"fun": "MUD.sendLine(JSON.stringify(user.player.toSavable(), null, '\t'));"
+	"body": "MUD.sendLine('TEST!')"
 }

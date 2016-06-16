@@ -20,7 +20,6 @@ function Mob(map, location, id) {
 }
 
 Mob.prototype = new Movable();
-
 Mob.prototype.keywords = "mob";
 Mob.prototype.display = "mob";
 Mob.prototype.description = "A mob.";
