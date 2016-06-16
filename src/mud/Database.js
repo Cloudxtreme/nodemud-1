@@ -3,7 +3,6 @@ var fs = require("fs");
 
 // local requires
 require("../util/String");
-
 var MUD = require("./MUD");
 var Log = require("./Log");
 
