@@ -140,11 +140,11 @@ UserCommand.prototype.execute = function(mob) {
 	};
 
 	var context = new vm.createContext(_context);
-//	try {
+	try {
 		script.runInContext(context);
-/*	} catch(e) {
+	} catch(e) {
 		Log.error(String.format("Failed to run user command '{0}' ({1})", this.regex, e));
-	}*/
+	}
 }
 
 module.exports = UserCommand;
