@@ -236,9 +236,8 @@ Database.save = function(block) {
 Database.saveMeta = function(block) {
 	try {
 		fs.writeFile("./data/meta.json~", JSON.stringify(Database.meta, null, "\t"), function(err) {
-			if(!err) {
-				fs.rename("./data/meta.json~", "./data/meta.json")
-			}
+			if(err) throw err;
+			fs.rename("./data/meta.json~", "./data/meta.json");
 		});
 	} catch(e) {
 		Log.error(String.format("Failed to save meta data ({1})", e.code));
@@ -252,9 +251,8 @@ Database.saveMeta = function(block) {
 Database.savePersistent = function(block) {
 	try {
 		fs.writeFile("./data/persistent.json~", JSON.stringify(Database.persistent, null, "\t"), function(err) {
-			if(!err) {
-				fs.rename("./data/persistent.json~", "./data/persistent.json");
-			}
+			if(err) throw err;
+			fs.rename("./data/persistent.json~", "./data/persistent.json");
 		});
 	} catch(e) {
 		Log.error(String.format("Failed to save persistent data ({1})", e))
