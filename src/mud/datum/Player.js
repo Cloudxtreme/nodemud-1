@@ -33,12 +33,15 @@ function Player(id, client) {
 	 * @instance
 	 * @method setClient
 	 * @memberof Player
-	 * @param {Client} client Client to begin listening to.
+	 * @param {Client?} client Client to begin listening to.
 	 */
 	this.setClient = function(client) {
 		if(this.client) {
+			var oClient = this.client;
+			this.client = null;
 			// stop listening for data from this client
-			this.client.removeListener("data", onData);
+			oClient.removeListener("data", onData);
+			oClient.setPlayer(null);
 		}
 
 		this.client = client;
@@ -164,7 +167,6 @@ Player.prototype.logout = function() {
 	if(!this.client) return;
 	this.sendLine(JSON.stringify({"player":this.getID(), "mob":this.mob.getCharacterID(), "exitCode":0x49273}));
 	this.client.close();
-	this.setClient(null);
 }
 
 /**
@@ -189,15 +191,14 @@ Player.prototype.send = function(string) {
  * @param {String} string String to send.
  */
 Player.prototype.sendLine = function(string, mode) {
+	if(!this.client) return;
 	if(mode == null) mode = MessageMode.MISC;
 	if(this.messageMode != null && this.messageMode != mode) {
 		this.client.sendLine("");
 	}
 
 	this.messageMode = mode;
-	if(this.client) {
-		this.client.sendLine(string);
-	}
+	this.client.sendLine(string);
 }
 
 /**

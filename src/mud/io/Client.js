@@ -66,11 +66,15 @@ Client.prototype.toString = function() {
 }
 /**
  * Assign player to client.
- * @param {Player} player Player to associate with.
+ * @param {Player?} player Player to associate with.
  */
 Client.prototype.setPlayer = function(player) {
+	if(this.player) {
+		this.player.setClient(null);
+	}
+
 	this.player = player;
-	if(player.client != this) {
+	if(player && player.client != this) {
 		player.setClient(this);
 	}
 }
@@ -78,7 +82,6 @@ Client.prototype.setPlayer = function(player) {
 Client.prototype.close = function() {
 	this.socket.end();
 	this.socket.destroy();
-	this.socket = null;
 }
 
 /**
