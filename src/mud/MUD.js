@@ -1,6 +1,6 @@
 // local requires
+var Logger = require("./Logger");
 require("../util/String");
-var Log = require("./Log");
 
 /**
  * Contains all data and methods for managing the normal operations of the game.
@@ -24,7 +24,7 @@ MUD.players = [];
 MUD.map = null;
 
 /**
- * Begin handling a new player connection.
+ * Begin a standard login process.
  * @param {Player} player Player to begin handling.
  */
 MUD.nanny = function(player) {
@@ -122,20 +122,52 @@ MUD.sendLine = function(str, mode, sender) {
 }
 
 /**
+ * Called when a new client connects.
+ * @param {Client} client Client connecting.
+ */
+var onConnect = function(client) {
+	var player = MUD.generatePlayer(client);
+	Logger.log("Connecting player: " + player.toString());
+	MUD.nanny(player);
+}
+
+/**
+ * Called when a client disconnects.
+ * @param {Client} client Client disconnecting.
+ */
+var onDisconnect = function(client) {
+	if(client.player) {
+		Logger.log("Disconnecting player: " + client.player);
+		var pos = MUD.players.indexOf(client.player);
+		if(pos == -1) {
+			return;
+		}
+
+		MUD.players.splice(pos,1);
+
+		if(client.player.mob) {
+			var mob = client.player.mob;
+			mob.setPlayer(null);
+			mob.setMap(null);
+		}
+	}
+}
+
+/**
  * Begin listening to a server.
  * @param {Server} server Server to listen to.
  */
 MUD.setServer = function(server) {
 	if(this.server) {
-		this.server.removeListener("connect", this.onConnect);
-		this.server.removeListener("disconnect", this.onDisconnect);
+		this.server.removeListener("connect", onConnect);
+		this.server.removeListener("disconnect", onDisconnect);
 	}
 
 	this.server = server;
 
 	if(server) {
-		server.on("connect", this.onConnect);
-		server.on("disconnect", this.onDisconnect);
+		server.on("connect", onConnect);
+		server.on("disconnect", onDisconnect);
 	}
 }
 
@@ -159,38 +191,6 @@ MUD.generatePlayer = function(client) {
 	var player = new Player(Database.getNextPlayerID(), client);
 	MUD.players.push(player);
 	return player;
-}
-
-/**
- * Called when a new client connects.
- * @param {Client} client Client connecting.
- */
-MUD.onConnect = function(client) {
-	var player = MUD.generatePlayer(client);
-	Log.log("Connecting player: " + player.toString());
-	MUD.nanny(player);
-}
-
-/**
- * Called when a client disconnects.
- * @param {Client} client Client disconnecting.
- */
-MUD.onDisconnect = function(client) {
-	if(client.player) {
-		Log.log("Disconnecting player: " + client.player);
-		var pos = MUD.players.indexOf(client.player);
-		if(pos == -1) {
-			return;
-		}
-
-		MUD.players.splice(pos,1);
-
-		if(client.player.mob) {
-			var mob = client.player.mob;
-			mob.setPlayer(null);
-			mob.setLocation(null);
-		}
-	}
 }
 
 module.exports = MUD;

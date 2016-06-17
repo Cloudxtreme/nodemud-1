@@ -1,7 +1,7 @@
 // local requires
 var Database = require("./src/mud/Database");
 var MUD = require("./src/mud/MUD");
-var Log = require("./src/mud/Log");
+var Logger = require("./src/mud/Logger");
 var Server = require("./src/mud/io/Server");
 require("./src/util/String");
 
@@ -16,7 +16,7 @@ MUD.setServer(s);
 s.on("ready", function() {
 	MUD.initialize();
 	var address = this.socket.address();
-	Log.boot(String.format("Shit's open and ready to roll on port {0}.", address.port));
+	Logger.boot(String.format("Shit's open and ready to roll on port {0}.", address.port));
 });
 
 // open the server on the default port

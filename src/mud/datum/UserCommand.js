@@ -12,7 +12,7 @@ var Mappable = require("../atom/Mappable");
 var Movable = require("../atom/Movable");
 var Mob = require("../atom/Mob");
 var Tile = require("../atom/Tile");
-var Log = require("../Log");
+var Logger = require("../Logger");
 require("../../util/String");
 
 /*var SafeContext = {
@@ -25,7 +25,7 @@ require("../../util/String");
 		meta:Database.meta
 	},
 
-	Log:Log,
+	Logger:Logger,
 	String:String,
 	Map:Map,
 	Mappable:Mappable,
@@ -123,7 +123,7 @@ UserCommand.prototype.execute = function(mob) {
 
 		// namespaces we share whole-cloth
 		String:String,
-		Log:Log,
+		Logger:Logger,
 		RealDirection:RealDirection,
 		Direction:Direction,
 
@@ -143,7 +143,7 @@ UserCommand.prototype.execute = function(mob) {
 	try {
 		script.runInContext(context);
 	} catch(e) {
-		Log.error(String.format("Failed to run user command '{0}' ({1})", this.regex, e));
+		Logger.error(String.format("Failed to run user command '{0}' ({1})", this.regex, e));
 	}
 }
 

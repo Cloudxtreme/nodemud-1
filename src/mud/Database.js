@@ -4,7 +4,7 @@ var fs = require("fs");
 // local requires
 require("../util/String");
 var MUD = require("./MUD");
-var Log = require("./Log");
+var Logger = require("./Logger");
 
 /**
  * Contains all data loaded at runtime, and methods related to saving and loading data.
@@ -147,7 +147,7 @@ Database.processCommand = function(mob, input) {
  * Load all runtime data.
  */
 Database.load = function() {
-	Log.boot("Loading database files...");
+	Logger.boot("Loading database files...");
 	this.loadMeta();
 	this.loadPersistent();
 	this.loadCommands();
@@ -160,7 +160,7 @@ Database.load = function() {
 Database.loadMeta = function() {
 	if(fs.existsSync("./data/meta.json")) {
 		this.meta = require("../../data/meta.json");
-		Log.boot("> Loaded meta.json");
+		Logger.boot("> Loaded meta.json");
 	}
 }
 
@@ -170,7 +170,7 @@ Database.loadMeta = function() {
 Database.loadPersistent = function() {
 	if(fs.existsSync("./data/persistent.json")) {
 		this.persistent = require("../../data/persistent.json");
-		Log.boot("> Loaded persistent.json");
+		Logger.boot("> Loaded persistent.json");
 	}
 }
 
@@ -180,7 +180,7 @@ Database.loadPersistent = function() {
 Database.loadCommands = function() {
 	var files = fs.readdirSync("./src/mud/command/");
 	if(files.length) {
-		Log.boot("> Loading commands...");
+		Logger.boot("> Loading commands...");
 		for(var file of files) {
 			var s = file.split(".");
 			try {
@@ -189,9 +189,9 @@ Database.loadCommands = function() {
 				if(instance.load == false) continue;
 				if(instance.regex == null) continue;
 				Database.commands.push(instance);
-				Log.boot(">  Loaded "+file);
+				Logger.boot(">  Loaded "+file);
 			} catch(e) {
-				Log.error(String.format("Failed to load command '{0}' ({1})", s[0], e));
+				Logger.error(String.format("Failed to load command '{0}' ({1})", s[0], e));
 			}
 		}
 	}
@@ -203,7 +203,7 @@ Database.loadCommands = function() {
 Database.loadUserCommands = function() {
 	var files = fs.readdirSync("./data/commands/");
 	if(files.length) {
-		Log.boot("> Loading user commands...");
+		Logger.boot("> Loading user commands...");
 		var UserCommand = require("./datum/UserCommand");
 		for(var file of files) {
 			var s = file.split(".");
@@ -212,9 +212,9 @@ Database.loadUserCommands = function() {
 				Database.userdata.commands.push(data);
 				var instance = new UserCommand(data);
 				Database.userCommands.push(instance);
-				Log.boot(">  Loaded "+file);
+				Logger.boot(">  Loaded "+file);
 			} catch(e) {
-				Log.error(String.format("Failed to load user command '{0}' ({1})", s[0], e));
+				Logger.error(String.format("Failed to load user command '{0}' ({1})", s[0], e));
 			}
 		}
 	}
@@ -240,7 +240,7 @@ Database.saveMeta = function(block) {
 			fs.rename("./data/meta.json~", "./data/meta.json");
 		});
 	} catch(e) {
-		Log.error(String.format("Failed to save meta data ({1})", e.code));
+		Logger.error(String.format("Failed to save meta data ({1})", e.code));
 	}
 }
 
@@ -255,7 +255,7 @@ Database.savePersistent = function(block) {
 			fs.rename("./data/persistent.json~", "./data/persistent.json");
 		});
 	} catch(e) {
-		Log.error(String.format("Failed to save persistent data ({1})", e))
+		Logger.error(String.format("Failed to save persistent data ({1})", e))
 	}
 }
 

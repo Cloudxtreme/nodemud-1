@@ -15,7 +15,7 @@ function Mob(map, location, id) {
 
 	// initialize
 	if(id != null) {
-		this.characterID = id;
+		this.setCharacterID(id);
 	}
 }
 
@@ -23,9 +23,6 @@ Mob.prototype = new Movable();
 Mob.prototype.keywords = "mob";
 Mob.prototype.display = "mob";
 Mob.prototype.description = "A mob.";
-
-/** Unique ID for characters. */
-Mob.prototype.characterID = null;
 
 Mob.prototype.toSavable = function() {
 	var savable = Movable.prototype.toSavable.call(this);
@@ -39,11 +36,51 @@ Mob.prototype.toSavable = function() {
 }
 
 /**
+ * Unique ID for characters.
+ * @type {Number}
+ */
+Mob.prototype.characterID = null;
+
+/**
  * Assign the character's unique ID.
  * @param {Number} id Unique character ID.
  */
 Mob.prototype.setCharacterID = function(id) {
 	this.characterID = id;
+}
+
+/**
+ * Get the mob's unique character ID.
+ * @return {Number?}
+ */
+Mob.prototype.getCharacterID = function(id) {
+	return this.characterID;
+}
+
+/**
+ * Assign a player to control this mob.
+ * @param {Player} player Player to control this mob.
+ */
+Mob.prototype.setPlayer = function(player) {
+	if(this.player) {
+		var oPlayer = this.player;
+		this.player = null;
+		oPlayer.setMob(null);
+	}
+
+	this.player = player;
+
+	if(player && player.mob != this) {
+		player.setMob(this);
+	}
+}
+
+/**
+ * Get the player controlling this mob.
+ * @return {Player?}
+ */
+Mob.prototype.getPlayer = function() {
+	return this.player;
 }
 
 /**
@@ -78,24 +115,6 @@ Mob.prototype.showRoom = function() {
 	}
 
 	this.sendLine(msg, MessageMode.COMMAND);
-}
-
-/**
- * Assign a player to control this mob.
- * @param {Player} player Player to control this mob.
- */
-Mob.prototype.setPlayer = function(player) {
-	if(this.player) {
-		var oPlayer = this.player;
-		this.player = null;
-		oPlayer.setMob(null);
-	}
-
-	this.player = player;
-
-	if(player && player.mob != this) {
-		player.setMob(this);
-	}
 }
 
 /**

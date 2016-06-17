@@ -1,21 +1,23 @@
 // local requires
 var MUD = require("../MUD");
 var Database = require("../Database");
-var Log = require("../Log");
+var Logger = require("../Logger");
 var MessageMode = require("../MessageMode");
 
 /**
  * Go-between for a Client and MUD.
+ * @param {Number} id ID of the player.
+ * @param {Client} client Client to control this player.
  * @constructor Player
  */
 function Player(id, client) {
 	var __ = this;
 
 	/** Private function that listens for data from Client. */
-	var inputCallback = function(data) {
+	var onData = function(data) {
 		var multi = data.split("\r\n");
 		if(multi.length==1) {
-			Log.error("non-command input: " + multi);
+			Logger.error("non-command input: " + multi);
 			return;
 		} else {
 			multi.length--;
@@ -36,7 +38,7 @@ function Player(id, client) {
 	this.setClient = function(client) {
 		if(this.client) {
 			// stop listening for data from this client
-			this.client.removeListener("data", inputCallback);
+			this.client.removeListener("data", onData);
 		}
 
 		this.client = client;
@@ -47,12 +49,12 @@ function Player(id, client) {
 			}
 
 			// listen for client data
-			client.on("data", inputCallback);
+			client.on("data", onData);
 		}
 	}
 
 	// initialize
-	if(id) {
+	if(id != null) {
 		this.id = id;
 	}
 
@@ -61,27 +63,33 @@ function Player(id, client) {
 	}
 }
 
-/** Unique player ID for this game session. */
-Player.prototype.id = 0;
+/**
+ * Unique player ID for this game session.
+ * @type {Number?}
+ */
+Player.prototype.id = null;
 
-/** Message mode for player. */
+/** 
+ * Message mode for player.
+ * @type {MessageMode?}
+ */
 Player.prototype.messageMode = MessageMode.MISC;
 
 /**
  * Client being managed by this player.
- * @type {Client}
+ * @type {Client?}
  */
 Player.prototype.client = null;
 
 /**
  * Mob being managed by this player.
- * @type {Mob}
+ * @type {Mob?}
  */
 Player.prototype.mob = null;
 
 /**
  * Function to pipe next input into.
- * @type {Function}
+ * @type {Function?}
  */
 Player.prototype.callback = null;
 
@@ -131,6 +139,31 @@ Player.prototype.setMob = function(mob) {
 	if(mob && mob.player != this) {
 		mob.setPlayer(this);
 	}
+}
+
+/**
+ * Get the client controlling this player.
+ * @return {Client?}
+ */
+Player.prototype.getClient = function() {
+	return this.client;
+}
+
+/**
+ * Get the player's unique session ID.
+ * @return {Number}
+ */
+Player.prototype.getID = function() {
+	return this.id;
+}
+
+/**
+ * Disconnect the player manually.
+ */
+Player.prototype.logout = function() {
+	if(!this.client) return;
+	this.sendLine(JSON.stringify({"player":this.getID(), "mob":this.mob.getCharacterID(), "exitCode":0x49273}));
+	this.client.close();
 }
 
 /**
@@ -187,7 +220,7 @@ Player.prototype.request = function(question, callback) {
  */
 Player.prototype.input = function(input) {
 	this.resetMessageMode();
-	Log.log(this.toString(), "'" + input + "'");
+	Logger.log(this.toString(), "'" + input + "'");
 	if(this.callback) {
 		// disassociate callback before calling
 		// so the callback can propagate more callbacks
