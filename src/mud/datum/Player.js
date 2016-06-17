@@ -164,6 +164,7 @@ Player.prototype.logout = function() {
 	if(!this.client) return;
 	this.sendLine(JSON.stringify({"player":this.getID(), "mob":this.mob.getCharacterID(), "exitCode":0x49273}));
 	this.client.close();
+	this.setClient(null);
 }
 
 /**

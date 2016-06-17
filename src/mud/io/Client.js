@@ -78,6 +78,7 @@ Client.prototype.setPlayer = function(player) {
 Client.prototype.close = function() {
 	this.socket.end();
 	this.socket.destroy();
+	this.socket = null;
 }
 
 /**
