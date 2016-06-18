@@ -137,10 +137,9 @@ Mappable.prototype.contains = function(mappable) {
  * @param {Mappable} mappable Mappable to add.
  */
 Mappable.prototype.addToContents = function(mappable) {
+	if(this.contains(mappable)) return;
 	this.contents.push(mappable);
-	if(mappable.location != this) {
-		mappable.setLocation(this);
-	}
+	mappable.setLocation(this);
 }
 
 /**
@@ -154,16 +153,16 @@ Mappable.prototype.removeFromContents = function(mappable) {
 	}
 
 	this.contents.splice(pos,1);
-	if(mappable.location == this) {
-		mappable.setLocation(null);
-	}
+	mappable.setLocation(null);
 }
 
 /**
  * Set the Mappable's current map.
- * @param {Map} map Map to move to.
+ * @param {Map?} map Map to move to.
  */
 Mappable.prototype.setMap = function(map) {
+	if(this.map == map) return;
+
 	if(this.map) {
 		var oMap = this.map;
 		this.map = null;
@@ -172,28 +171,30 @@ Mappable.prototype.setMap = function(map) {
 
 	this.map = map;
 
-	if(map && !map.contains(this)) {
+	if(map) {
 		map.addToContents(this);
-	} else if(!map || this.location.map != map) {
+	} else {
 		this.setLocation(null);
 	}
 }
 
 /**
  * Set the Mappable's current location.
- * @param {Mappable} mappable New location.
+ * @param {Mappable?} mappable New location.
  */
 Mappable.prototype.setLocation = function(mappable) {
+	if(this.location == mappable) return;
+
 	if(this.location) {
-		this.location.removeFromContents(this);
+		var oLocation = this.location;
+		this.location = null;
+		oLocation.removeFromContents(this);
 	}
 
 	this.location = mappable;
 
 	if(mappable) {
-		if(this.map != mappable.map) {
-			this.setMap(mappable.map);
-		}
+		this.setMap(mappable.map);
 		mappable.addToContents(this);
 	}
 }

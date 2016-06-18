@@ -59,9 +59,11 @@ Mob.prototype.getCharacterID = function(id) {
 
 /**
  * Assign a player to control this mob.
- * @param {Player} player Player to control this mob.
+ * @param {Player?} player Player to control this mob.
  */
 Mob.prototype.setPlayer = function(player) {
+	if(this.player == player) return;
+
 	if(this.player) {
 		var oPlayer = this.player;
 		this.player = null;
@@ -70,7 +72,7 @@ Mob.prototype.setPlayer = function(player) {
 
 	this.player = player;
 
-	if(player && player.mob != this) {
+	if(player) {
 		player.setMob(this);
 	}
 }

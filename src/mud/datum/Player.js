@@ -6,8 +6,8 @@ var MessageMode = require("../MessageMode");
 
 /**
  * Go-between for a Client and MUD.
- * @param {Number} id ID of the player.
- * @param {Client} client Client to control this player.
+ * @param {Number?} id ID of the player.
+ * @param {Client?} client Client to control this player.
  * @constructor Player
  */
 function Player(id, client) {
@@ -36,20 +36,21 @@ function Player(id, client) {
 	 * @param {Client?} client Client to begin listening to.
 	 */
 	this.setClient = function(client) {
+		if(this.client == client) return;
+
 		if(this.client) {
 			var oClient = this.client;
 			this.client = null;
+			oClient.setPlayer(null);
+
 			// stop listening for data from this client
 			oClient.removeListener("data", onData);
-			oClient.setPlayer(null);
 		}
 
 		this.client = client;
 
 		if(client) {
-			if(client.player != this) {
-				client.setPlayer(this);
-			}
+			client.setPlayer(this);
 
 			// listen for client data
 			client.on("data", onData);
@@ -128,9 +129,11 @@ Player.prototype.toString = function() {
 
 /**
  * Begin managing a mob.
- * @param {Mob} mob Mob to begin managing.
+ * @param {Mob?} mob Mob to begin managing.
  */
 Player.prototype.setMob = function(mob) {
+	if(this.mob == mob) return;
+
 	if(this.mob) {
 		var oMob = this.mob;
 		this.mob = null;
@@ -139,7 +142,7 @@ Player.prototype.setMob = function(mob) {
 
 	this.mob = mob;
 
-	if(mob && mob.player != this) {
+	if(mob) {
 		mob.setPlayer(this);
 	}
 }

@@ -96,14 +96,9 @@ Map.prototype.contains = function(mappable) {
  * @param {Mappable} mappable Mappable to add.
  */
 Map.prototype.addToContents = function(mappable) {
-	if(this.contains(mappable)) {
-		return;
-	}
-
+	if(this.contains(mappable)) return;
 	this.contents.push(mappable);
-	if(mappable.map != this) {
-		mappable.setMap(this);
-	}
+	mappable.setMap(this);
 }
 
 /**
@@ -117,9 +112,7 @@ Map.prototype.removeFromContents = function(mappable) {
 	}
 
 	this.contents.splice(pos,1);
-	if(mappable.map == this) {
-		mappable.setMap(null);
-	}
+	mappable.setMap(null);
 }
 
 module.exports = Map;

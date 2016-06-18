@@ -69,12 +69,16 @@ Client.prototype.toString = function() {
  * @param {Player?} player Player to associate with.
  */
 Client.prototype.setPlayer = function(player) {
+	if(this.player == player) return;
+
 	if(this.player) {
-		this.player.setClient(null);
+		var oPlayer = this.player;
+		this.player = null;
+		oPlayer.setClient(null);
 	}
 
 	this.player = player;
-	if(player && player.client != this) {
+	if(player) {
 		player.setClient(this);
 	}
 }
