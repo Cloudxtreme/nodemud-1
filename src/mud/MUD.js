@@ -113,10 +113,24 @@ MUD.nanny = function(player) {
  * @param {String} str String to send.
  * @param {Number} mode Message mode value.
  */
-MUD.sendLine = function(str, mode, sender) {
+MUD.sendLine = function(str, sender) {
 	for(var player of MUD.players) {
 		if(player != sender) {
-			player.sendLine(str, mode);
+			player.sendLine(str);
+		}
+	}
+}
+
+/**
+ * Send a line to all connected players.
+ * @param {String} str String to send.
+ * @param {MessageMode?} mode Message mode.
+ * @param {Player?} sender Player that sent the message.
+ */
+MUD.sendMessage = function(str, mode, sender) {
+	for(var player of MUD.players) {
+		if(player != sender) {
+			player.sendLine(str);
 		}
 	}
 }

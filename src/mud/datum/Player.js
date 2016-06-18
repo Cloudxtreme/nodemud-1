@@ -190,10 +190,11 @@ Player.prototype.send = function(string) {
 }
 
 /**
- * Send string (with linefeed) to the player.
- * @param {String} string String to send.
+ * Send a message to the player.
+ * @param {String} message Message to be sent.
+ * @param {MessageMode?} mode Mode of the message.
  */
-Player.prototype.sendLine = function(string, mode) {
+Player.prototype.sendMessage = function(message, mode) {
 	if(!this.client) return;
 	if(mode == null) mode = MessageMode.MISC;
 	if(this.messageMode != null && this.messageMode != mode) {
@@ -201,7 +202,17 @@ Player.prototype.sendLine = function(string, mode) {
 	}
 
 	this.messageMode = mode;
-	this.client.sendLine(string);
+	this.client.sendLine(message);
+}
+
+/**
+ * Send string (with linefeed) to the player.
+ * @param {String} string String to send.
+ */
+Player.prototype.sendLine = function(string) {
+	if(this.client) {
+		this.client.sendLine(string);
+	}
 }
 
 /**

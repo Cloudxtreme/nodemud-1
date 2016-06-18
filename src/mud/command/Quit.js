@@ -15,7 +15,7 @@ Quit.prototype = new Command();
 Quit.prototype.execute = function(mob) {
 	var player = mob.getPlayer();
 	if(!player) {
-		mob.sendLine("You're not a player...");
+		mob.sendMessage("You're not a player...", MessageMode.COMMAND);
 		return
 	}
 

@@ -1,4 +1,4 @@
 {
 	"regex": "^test$",
-	"body": "MUD.sendLine('This isn't offensive.')"
+	"body": "MUD.sendLine(\"This isn't offensive.\")"
 }

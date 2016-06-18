@@ -11,7 +11,7 @@ function Movement() {
 
 	this.execute = function(mob) {
 		if(!mob.step(this.direction)) {
-			mob.sendLine("You cannot go that way.", MessageMode.COMMAND);
+			mob.sendMessage("You cannot go that way.", MessageMode.COMMAND);
 		}
 	}
 }

@@ -12,7 +12,7 @@ function OOC() {
 	this.execute = function(mob, message) {
 		var obj = new Movable();
 		obj.move(mob);
-		MUD.sendLine(JSON.stringify(mob.toSavable(), null, "\t"), MessageMode.COMMAND);
+		MUD.sendMessage(JSON.stringify(mob.toSavable(), null, "\t"), MessageMode.COMMAND);
 	}
 }
 

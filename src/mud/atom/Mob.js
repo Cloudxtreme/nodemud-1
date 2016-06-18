@@ -116,7 +116,7 @@ Mob.prototype.showRoom = function() {
 		msg += String.format("\r\n {0} is here.", etc.display);
 	}
 
-	this.sendLine(msg, MessageMode.COMMAND);
+	this.sendMessage(msg, MessageMode.COMMAND);
 }
 
 /**
@@ -136,6 +136,16 @@ Mob.prototype.send = function(string) {
 Mob.prototype.sendLine = function(string) {
 	if(this.player) {
 		this.player.sendLine(string);
+	}
+}
+
+/**
+ * Send a message to the player.
+ * @param {String} message Message mode.
+ */
+Mob.prototype.sendMessage = function(message, mode) {
+	if(this.player) {
+		this.player.sendMessage(message, mode);
 	}
 }
 

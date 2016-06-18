@@ -10,8 +10,8 @@ function OOC() {
 	this.regex = /^ooc (.+)/i
 
 	this.execute = function(mob, message) {
-		MUD.sendLine(String.format("{0} OOCs '{1}'", mob.display, message), MessageMode.CHAT, mob.player);
-		mob.sendLine(String.format("You OOC '{0}'", message), MessageMode.COMMAND);
+		MUD.sendMessage(String.format("{0} OOCs '{1}'", mob.display, message), MessageMode.CHAT, mob.player);
+		mob.sendMessage(String.format("You OOC '{0}'", message), MessageMode.COMMAND);
 	}
 }
 
