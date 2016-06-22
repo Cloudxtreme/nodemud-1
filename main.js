@@ -1,7 +1,7 @@
 // local requires
 var Database = require("./src/mud/Database");
 var MUD = require("./src/mud/MUD");
-var Logger = require("./src/mud/Logger");
+var Logger = require("./src/mud/Database").logger;
 var Server = require("./src/mud/io/Server");
 require("./src/util/String");
 

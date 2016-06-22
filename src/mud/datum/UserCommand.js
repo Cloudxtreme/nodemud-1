@@ -12,7 +12,7 @@ var Mappable = require("../atom/Mappable");
 var Movable = require("../atom/Movable");
 var Mob = require("../atom/Mob");
 var Tile = require("../atom/Tile");
-var Logger = require("../Logger");
+var Logger = require("../Database").logger;
 require("../../util/String");
 
 /*var SafeContext = {

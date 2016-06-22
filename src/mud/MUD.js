@@ -1,5 +1,4 @@
 // local requires
-var Logger = require("./Logger");
 require("../util/String");
 
 /**
@@ -140,6 +139,7 @@ MUD.sendMessage = function(str, mode, sender) {
  * @param {Client} client Client connecting.
  */
 var onConnect = function(client) {
+	var Logger = require("./Database").logger;
 	var player = MUD.generatePlayer(client);
 	Logger.log("Connecting player: " + player.toString());
 	MUD.nanny(player);
@@ -150,6 +150,7 @@ var onConnect = function(client) {
  * @param {Client} client Client disconnecting.
  */
 var onDisconnect = function(client) {
+	var Logger = require("./Database").logger;
 	if(client.player) {
 		Logger.log("Disconnecting player: " + client.player);
 		var pos = MUD.players.indexOf(client.player);

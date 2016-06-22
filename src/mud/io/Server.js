@@ -5,7 +5,7 @@ var Client	= require("./Client");
 /**
  * Lowest level MUD server manager.
  * @constructor
- * @extends events.EventEmitter
+ * @extends EventEmitter
  */
 function Server() {
 	events.EventEmitter.call(this);

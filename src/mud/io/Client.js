@@ -4,7 +4,7 @@ var events = require("events");
  * Lowest level MUD client manager.
  * @param {net.socket} socket NodeJS client socket to manage.
  * @constructor
- * @extends events.EventEmitter
+ * @extends EventEmitter
  */
 function Client(socket) {
 	events.EventEmitter.call(this);
