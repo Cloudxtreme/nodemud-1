@@ -22,17 +22,16 @@ function Mob(map, location, id) {
 Mob.prototype = new Movable();
 Mob.prototype.keywords = "mob";
 Mob.prototype.display = "mob";
-Mob.prototype.description = "A mob.";
 
-Mob.prototype.toSavable = function() {
-	var savable = Movable.prototype.toSavable.call(this);
-	savable.type = "Mob";
+/**
+ * The player associated with this mob.
+ * @type {Player}
+ */
+Mob.prototype.player = null;
 
-	if(this.characterID!=null) {
-		savable.id = this.characterID;
-	}
-
-	return savable;
+Mob.prototype.replacer = function(name, value) {
+	if(name == "player") return undefined;
+	return Movable.prototype.replacer.call(this, name, value);
 }
 
 /**

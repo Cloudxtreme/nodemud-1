@@ -15,17 +15,10 @@ function Movable(map, location) {
 Movable.prototype = new Mappable();
 Movable.prototype.keywords = "movable";
 Movable.prototype.display = "movable";
-Movable.prototype.description = "A movable.";
 
-Movable.prototype.toSavable = function() {
-	var savable = Mappable.prototype.toSavable.call(this);
-	savable.type = "Movable";
-
-	if(this.location != null && this.location instanceof Tile) {
-		savable.location = this.location.getCoordinates();
-	}
-
-	return savable;
+Movable.prototype.replacer = function(name, value) {
+	if(name == "location" && value instanceof Tile) return value.getCoordinates();
+	return Mappable.prototype.replacer.call(this, name, value);
 }
 
 /**

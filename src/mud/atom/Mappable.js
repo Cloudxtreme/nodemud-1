@@ -23,31 +23,31 @@ function Mappable(map, location) {
  * Keywords for referencing this mappable.
  * @type {String}
  */
-Mappable.prototype.keywords = "mappable"; // keywords for reference
+Mappable.prototype.keywords = "mappable";
 
 /**
  * String used to display this mappable.
  * @type {String}
  */
-Mappable.prototype.display = "mappable"; // display name shown in rooms and such
+Mappable.prototype.display = "mappable";
 
 /**
  * Longer description of the mappable.
  * @type {String}
  */
-Mappable.prototype.description = "A mappable object."; // long description for object.
+Mappable.prototype.description = null;
 
 /**
  * Current map this mappable is on.
  * @type {Map}
  */
-Mappable.prototype.map = null; // map this mappable is inhabiting
+Mappable.prototype.map = null;
 
 /**
  * Current location (another mappable).
  * @type {Mappable}
  */
-Mappable.prototype.location = null; // null or another mappable
+Mappable.prototype.location = null;
 
 /**
  * Contents of this mappable.
@@ -55,29 +55,34 @@ Mappable.prototype.location = null; // null or another mappable
  */
 Mappable.prototype.contents = null;
 
-/**
- * Returns a JSON object to represent this mappable that can be saved.
- * @return {Object}
- */
-Mappable.prototype.toSavable = function() {
-	var savable = {
-		"type": "Mappable",
-		"keywords": this.keywords,
-		"display": this.display,
-		"description": this.description
-	};
-
-	if(this.contents.length) {
-		var c = [];
-		for(var i=0;i<this.contents.length;i++) {
-			var obj = this.contents[i];
-			c.push(obj.toSavable());
-		}
-
-		savable.contents = c;
+Mappable.prototype.getJSON = function() {
+	var json = {};
+	for(var name in this) {
+		var value = this.replacer(name, this[name]);
+		if(value instanceof Function) continue;
+		if(value === undefined) continue;
+		json[name] = value;
 	}
 
-	return savable;
+	return json;
+}
+
+Mappable.prototype.replacer = function(name, value) {
+	if(value == this.__proto__[name]) return undefined;
+	if(name == "contents") {
+		if(value.length == 0) return undefined;
+		var safe = [];
+		for(var i in value) {
+			var obj = value[i];
+			if(!(obj instanceof Mappable)) continue;
+			safe.push(obj.getJSON());
+		}
+
+		return safe;
+	}
+	if(name == "location") return undefined;
+	if(name == "map") return undefined;
+	return value;
 }
 
 /**
